@@ -6,8 +6,8 @@ import pandas as pd
 import numpy as np
 
 ###################################  Logic Goes Here ################################### 
-repos = pd.read_csv('repos_info.csv')
-commits = pd.read_csv('commits_info.csv')
+repos = pd.read_csv('../data/repos_info.csv')
+commits = pd.read_csv('../data/commits_info.csv')
 
 
 commits_count = pd.DataFrame(pd.merge(repos, 
