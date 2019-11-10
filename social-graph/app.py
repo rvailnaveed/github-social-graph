@@ -34,6 +34,16 @@ encoded_openai = base64.b64encode(open(openai, 'rb').read())
 ###################################  Custom Styles  ################################### 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+title = {
+    "font-weight" : "bold"
+}
+
+subheading = {
+    'text-align' : 'center'
+}
+
+
+
 ###################################  Custom Styles  ################################### 
 
 
@@ -42,8 +52,8 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
 app.layout = html.Div(children=[
-    html.H1("Github Social Graph", style={"font-weight" : "bold"}),
-    html.H3("A Year in Review...", style={'text-align' : 'center'}),
+    html.H1("Github Social Graph", id="title", style=title),
+    html.H3("A Year in Review...", id="subheading", style=subheading),
     html.Img(src='data:image/png;base64,{}'.format(encoded_github)),
     html.Img(src='data:image/png;base64,{}'.format(encoded_openai)),
 
