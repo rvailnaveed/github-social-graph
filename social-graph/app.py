@@ -25,8 +25,10 @@ commits = repos['Commits count']
 
 github = 'github.png'
 openai = 'openai.png'
+chain = 'chain.png'
 encoded_github = base64.b64encode(open(github, 'rb').read())
 encoded_openai = base64.b64encode(open(openai, 'rb').read())
+encoded_chain = base64.b64encode(open(chain, 'rb').read())
 ###################################  Logic Goes Here  ################################### 
 
 
@@ -42,6 +44,24 @@ subheading = {
     'text-align' : 'center'
 }
 
+row = {
+    'text-align' : 'center',
+}
+
+
+image = {
+    'display': 'inline-block',
+    'align': 'middle',
+    'width': '100px',
+    'height': '100px'
+}
+
+openai_image = {
+    'display': 'inline-block',
+    'width': '300px',
+    'height': '100px'
+}
+
 
 
 ###################################  Custom Styles  ################################### 
@@ -52,10 +72,15 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
 app.layout = html.Div(children=[
-    html.H1("Github Social Graph", id="title", style=title),
-    html.H3("A Year in Review...", id="subheading", style=subheading),
-    html.Img(src='data:image/png;base64,{}'.format(encoded_github)),
-    html.Img(src='data:image/png;base64,{}'.format(encoded_openai)),
+    html.H1("Github Social Graph", style=title),
+    html.H3("A Year in Review...", style=subheading),
+
+    html.Div(children=[
+        html.Img(src='data:image/png;base64,{}'.format(encoded_github), style=image),
+        html.Img(src='data:image/png;base64,{}'.format(encoded_chain), style=image),
+        html.Img(src='data:image/png;base64,{}'.format(encoded_openai), style=openai_image)
+    ], style=row),
+
 
     dcc.Graph(
         id='example-graph',
