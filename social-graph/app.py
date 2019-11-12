@@ -2,6 +2,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 import base64
@@ -21,14 +22,26 @@ commits_count.columns = ['Id', 'Commits count']
 repos = pd.merge(repos, commits_count, on = 'Id')
 
 repo_names = repos['Name']
-commits = repos['Commits count']
+commits = repos['Commits count'].sort_values(ascending=False)
+
+list_of_languages = []
+for languages in repos['Languages']:
+    if type(languages) == str:
+        for language in languages.split(','):
+            list_of_languages.append(language.strip())
+
+languages_count = pd.Series(list_of_languages).value_counts()
+
+
 
 github = 'github.png'
 openai = 'openai.png'
 chain = 'chain.png'
-encoded_github = base64.b64encode(open(github, 'rb').read())
-encoded_openai = base64.b64encode(open(openai, 'rb').read())
-encoded_chain = base64.b64encode(open(chain, 'rb').read())
+
+encoded_github = base64.b64encode(open(github, 'rb').read()).decode('ascii')
+encoded_openai = base64.b64encode(open(openai, 'rb').read()).decode('ascii')
+encoded_chain = base64.b64encode(open(chain, 'rb').read()).decode('ascii')
+
 ###################################  Logic Goes Here  ################################### 
 
 
@@ -37,7 +50,9 @@ encoded_chain = base64.b64encode(open(chain, 'rb').read())
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 title = {
-    "font-weight" : "bold"
+    "font-weight" : "bold",
+    "text-align": "center",
+    "font-family": 'Roboto Mono'
 }
 
 subheading = {
@@ -51,7 +66,6 @@ row = {
 
 image = {
     'display': 'inline-block',
-    'align': 'middle',
     'width': '100px',
     'height': '100px'
 }
@@ -59,7 +73,7 @@ image = {
 openai_image = {
     'display': 'inline-block',
     'width': '300px',
-    'height': '100px'
+    'height': '120px'
 }
 
 
@@ -73,12 +87,12 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div(children=[
     html.H1("Github Social Graph", style=title),
-    html.H3("A Year in Review...", style=subheading),
+    html.H3("A Visualisation of OpenAI's Github Data", style=subheading),
 
     html.Div(children=[
         html.Img(src='data:image/png;base64,{}'.format(encoded_github), style=image),
         html.Img(src='data:image/png;base64,{}'.format(encoded_chain), style=image),
-        html.Img(src='data:image/png;base64,{}'.format(encoded_openai), style=openai_image)
+        html.Img(src='data:image/png;base64,{}'.format(encoded_openai), style=image)
     ], style=row),
 
 
@@ -92,6 +106,19 @@ app.layout = html.Div(children=[
                 'title': 'Commits per Repository',
                 
             }
+        }
+    ),
+
+    dcc.Graph(
+        id='languages',
+        figure={
+            'data': [
+                go.Pie(
+                    labels=list_of_languages, 
+                    values=languages_count, 
+                    hole=.3
+                )
+            ]
         }
     )
 ])

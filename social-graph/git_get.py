@@ -10,7 +10,7 @@ def data_to_csv():
     credentials = json.loads(open('credentials.json').read())
     authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
 
-    data = requests.get('https://api.github.com/users/' + 'facebook', auth=authentication)
+    data = requests.get('https://api.github.com/users/' + 'openai', auth=authentication)
     data = data.json()
 
     # print("Information about user {}:\n".format(credentials['username']))
@@ -33,8 +33,6 @@ def data_to_csv():
         # print("Total repositories fetched: {}".format(repos_fetched))
         if (repos_fetched == 30):
             page_no = page_no + 1
-            if page_no >= 10:
-                break
             url = data['repos_url'] + '?page=' + str(page_no)
         else:
             break
@@ -93,8 +91,6 @@ def data_to_csv():
                 commits_information.append(commit_data)
             if (len(response) == 30):
                 page_no = page_no + 1
-                if page_no >= 10:
-                    break
                 url = repos_df.loc[i, 'Commits URL'] + '?page=' + str(page_no)
             else:
                 break
@@ -102,3 +98,7 @@ def data_to_csv():
     commits_df = pd.DataFrame(commits_information, columns = ['Repo Id', 'Repo Name', 'Commit Id', 'Date'])
     commits_df.to_csv('commits_info.csv', index = False)
     print("Saved commits information to commits_info.csv")
+
+
+if __name__ == "__main__":
+    data_to_csv()
