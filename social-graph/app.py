@@ -52,7 +52,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 title = {
     "font-weight" : "bold",
     "text-align": "center",
-    "font-family": 'Roboto Mono'
+    "font-family": 'Roboto'
 }
 
 subheading = {
@@ -67,7 +67,8 @@ row = {
 image = {
     'display': 'inline-block',
     'width': '100px',
-    'height': '100px'
+    'height': '100px',
+    'padding': '10px'
 }
 
 openai_image = {
@@ -91,37 +92,49 @@ app.layout = html.Div(children=[
 
     html.Div(children=[
         html.Img(src='data:image/png;base64,{}'.format(encoded_github), style=image),
-        html.Img(src='data:image/png;base64,{}'.format(encoded_chain), style=image),
+       # html.Img(src='data:image/png;base64,{}'.format(encoded_chain), style=image),
         html.Img(src='data:image/png;base64,{}'.format(encoded_openai), style=image)
     ], style=row),
 
+    html.Div([
+        html.Div([
+            dcc.Graph(
+                id='commits_per_repo',
+                figure={
+                    'data': [
+                        {'x': repo_names, 'y': commits, 'type': 'bar'}
+                    ],
+                    'layout': {
+                        'title': 'Commits per Repository',
+                        
+                    }
+                }
+            )
+        ], className="six columns"),
 
-    dcc.Graph(
-        id='example-graph',
-        figure={
-            'data': [
-                {'x': repo_names, 'y': commits, 'type': 'bar'}
-            ],
-            'layout': {
-                'title': 'Commits per Repository',
-                
-            }
-        }
-    ),
+        html.Div([
+            dcc.Graph(
+                id='languages_donut',
+                figure={
+                    'data': [
+                        go.Pie(
+                            labels=list_of_languages, 
+                            values=languages_count, 
+                            hole=.3
+                        )
+                    ],
+                    'layout': {
+                        'title': 'Popular Languages',
+                    }
 
-    dcc.Graph(
-        id='languages',
-        figure={
-            'data': [
-                go.Pie(
-                    labels=list_of_languages, 
-                    values=languages_count, 
-                    hole=.3
-                )
-            ]
-        }
-    )
+                }
+            )
+        ], className="six columns")
+    ], className="row"),
+
 ])
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
