@@ -34,7 +34,7 @@ languages_count = pd.Series(list_of_languages).value_counts()
 
 
 
-github = 'github.png'
+github = 'github_blue.png'
 openai = 'openai.png'
 chain = 'chain.png'
 
@@ -102,10 +102,13 @@ app.layout = html.Div(children=[
                 id='commits_per_repo',
                 figure={
                     'data': [
-                        {'x': repo_names, 'y': commits, 'type': 'bar'}
+                        {'x': repo_names, 'y': commits, 'type': 'bar', 'marker':dict(color='#44D7A8')}
                     ],
                     'layout': {
                         'title': 'Commits per Repository',
+                        'paper_bgcolor': 'rgba(0,0,0,0)',
+                        'plot_bgcolor': 'rgba(0,0,0,0)',
+                        
                         
                     }
                 }
@@ -125,6 +128,8 @@ app.layout = html.Div(children=[
                     ],
                     'layout': {
                         'title': 'Popular Languages',
+                        'paper_bgcolor': 'rgba(0,0,0,0)',
+                        'plot_bgcolor': 'rgba(0,0,0,0)'
                     }
 
                 }
@@ -132,7 +137,7 @@ app.layout = html.Div(children=[
         ], className="six columns")
     ], className="row"),
 
-])
+], style={})
 
 if __name__ == '__main__':
     app.run_server(debug=True)
