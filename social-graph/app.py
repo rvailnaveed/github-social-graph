@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 import base64
 
+import git_get
+
 ###################################  Logic Goes Here ################################### 
 repos = pd.read_csv('../data/repos_info.csv')
 commits = pd.read_csv('../data/commits_info.csv')
@@ -180,7 +182,7 @@ app.layout = html.Div(children=[
     Output('output-container', 'children'),
     [Input('repo-select', 'value')]
 )
-def update_output(value):
+def update_contribs_graph(value):
     if value == 'gym':
         return dcc.Graph(
             id='blah',

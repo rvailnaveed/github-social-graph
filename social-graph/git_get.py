@@ -2,6 +2,7 @@ import json
 import requests
 import numpy as np
 import pandas as pd
+from pprint import pprint
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -99,15 +100,38 @@ def top_level_info():
     commits_df.to_csv('commits_info.csv', index = False)
     print("Saved commits information to commits_info.csv")
 
-
-def get_contributor_info(repo):
-    url = 'https://api.github.com/repos/openai/"{}"/stats/contributors'.format(repo)
+# Take advantage of the fact that contributors returned by ascending commits
+def get_contributors_info(repo):
+    url = 'https://api.github.com/repos/openai/{}/stats/contributors'.format(repo)
     data = requests.get(url)
     data = data.json()
 
-    print("Collecting contributor information for " + str(repo))
+    contribs = []
+    i = 98
+    while(i > 88):
+        contrib = data[i]
+        contribs.append(contrib)
+        i -= 1
 
+    contribs_info = []
+    for c in contribs:
+        c_data = []
+        name = c['author']['login']
+        additions = 0
+        deletions = 0
+        commits = c['total']
+        for w in c['weeks']:
+            additions += w['a']
+            deletions += w['d']
+        c_data.append(name)
+        c_data.append(additions)
+        c_data.append(deletions)
+        c_data.append(commits)
+        contribs_info.append(c_data)
+
+    contribs_df = pd.DataFrame(contribs_info, columns= ['User', 'Additions', 'Deletions', 'Total_Commits'])
+    return contribs_df
 
 
 if __name__ == "__main__":
-    top_level_info()
+    pass
