@@ -107,8 +107,9 @@ def get_contributors_info(repo):
     data = data.json()
 
     contribs = []
-    i = 98
-    while(i > 88):
+    count = len(data) - 1
+    i = count
+    while(i > count-10):
         contrib = data[i]
         contribs.append(contrib)
         i -= 1
@@ -134,4 +135,4 @@ def get_contributors_info(repo):
 
 
 if __name__ == "__main__":
-    pass
+    get_contributors_info("gym")

@@ -183,17 +183,25 @@ app.layout = html.Div(children=[
     [Input('repo-select', 'value')]
 )
 def update_contribs_graph(value):
-    if value == 'gym':
-        return dcc.Graph(
-            id='blah',
-            figure={
-                'data': [{
-                    'x': repo_names, 
-                    'y': commits, 
-                    'type': 'bar', 
-                }]
-            }
+    if value != None:
+        info = git_get.get_contributors_info(value)
+        
+        trace1 = go.Bar(
+            x=info['User'], y=info['Additions'],
+            name="additions"
         )
+        trace2 = go.Bar(
+            x=info['User'], y=info['Deletions'],
+            name="deletions"
+        )
+        data = [trace2, trace1]
+        layout = go.Layout(
+            barmode= 'stack'
+        )
+
+        fig = go.Figure(data=data, layout=layout)
+
+        return dcc.Graph(figure=fig)
 
 
 if __name__ == '__main__':
