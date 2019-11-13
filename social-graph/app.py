@@ -96,6 +96,7 @@ openai_image = {
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
+
 app.layout = html.Div(children=[
     html.H1("Github Social Graph", style=title),
     html.H3("A Visualisation of OpenAI's Github Data", style=subheading),
@@ -154,18 +155,19 @@ app.layout = html.Div(children=[
         ], className="six columns")
     ], className="row"),
 
-    html.Div([
-
-    ]),
-
     dcc.Dropdown(
         id='repo-select',
         options=[
-            {'label': 'gym', 'value': 'gym'}
+            {'label': 'gym', 'value': 'gym'},
+            {'label': 'baselines', 'value': 'baselines'},
+            {'label':'roboschool', 'value': 'roboschool'},
+            {'label': 'mujoco-py', 'value': 'mujoco-py'},
+            {'label': 'spinningup', 'value': 'spinningup'},
+            {'label': 'retro', 'value': 'retro'}
         ],
-        #value= 'gym',
+        value= 'gym',
         style= {
-            'width': '100px',
+            'width': '130px',
             'margin-top': '3em'
         }
     ),
@@ -196,7 +198,8 @@ def update_contribs_graph(value):
         )
         data = [trace2, trace1]
         layout = go.Layout(
-            barmode= 'stack'
+            barmode= 'stack',
+            title='Additions vs Deletions For Top 10 Contributors'
         )
 
         fig = go.Figure(data=data, layout=layout)
