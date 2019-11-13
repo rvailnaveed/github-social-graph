@@ -2,6 +2,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
@@ -22,7 +23,14 @@ commits_count.columns = ['Id', 'Commits count']
 repos = pd.merge(repos, commits_count, on = 'Id')
 
 repo_names = repos['Name']
-commits = repos['Commits count'].sort_values(ascending=False)
+commits = repos['Commits count'].sort_values(ascending=True)
+
+color = np.array(['rgb(255,255,255)']*commits.shape[0])
+color[commits>=1] = 'c6e48b' # pale green
+color[commits>=100] = '7bc96f' # green
+color[commits>=500] = '#239a3b' # olive green
+color[commits>=1000] = '#196127' # dark green
+
 
 list_of_languages = []
 for languages in repos['Languages']:
@@ -52,11 +60,11 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 title = {
     "font-weight" : "bold",
     "text-align": "center",
-    "font-family": 'Roboto'
 }
 
 subheading = {
-    'text-align' : 'center'
+    'text-align' : 'center',
+    'font-style': 'italic'
 }
 
 row = {
@@ -92,7 +100,6 @@ app.layout = html.Div(children=[
 
     html.Div(children=[
         html.Img(src='data:image/png;base64,{}'.format(encoded_github), style=image),
-       # html.Img(src='data:image/png;base64,{}'.format(encoded_chain), style=image),
         html.Img(src='data:image/png;base64,{}'.format(encoded_openai), style=image)
     ], style=row),
 
@@ -102,14 +109,22 @@ app.layout = html.Div(children=[
                 id='commits_per_repo',
                 figure={
                     'data': [
-                        {'x': repo_names, 'y': commits, 'type': 'bar', 'marker':dict(color='#44D7A8')}
+                        {'x': repo_names, 'y': commits, 'type': 'bar', 'marker':dict(color=color.tolist())}
                     ],
                     'layout': {
                         'title': 'Commits per Repository',
                         'paper_bgcolor': 'rgba(0,0,0,0)',
                         'plot_bgcolor': 'rgba(0,0,0,0)',
-                        
-                        
+                        'xaxis': {
+                            'title': {
+                                'text': 'Repository'
+                            }
+                        },
+                        'yaxis': {
+                            'title': {
+                                'text': 'Commit Count'
+                            }
+                        }
                     }
                 }
             )
@@ -137,7 +152,47 @@ app.layout = html.Div(children=[
         ], className="six columns")
     ], className="row"),
 
-], style={})
+    html.Div([
+
+    ]),
+
+    dcc.Dropdown(
+        id='repo-select',
+        options=[
+            {'label': 'gym', 'value': 'gym'}
+        ],
+        #value= 'gym',
+        style= {
+            'width': '100px',
+            'margin-top': '3em'
+        }
+    ),
+
+    html.Div([
+        html.Div([
+            html.H1("")
+        ],className='six columns'),
+        html.Div(id='output-container', className='six columns')
+    ], className = 'row')
+])
+
+@app.callback(
+    Output('output-container', 'children'),
+    [Input('repo-select', 'value')]
+)
+def update_output(value):
+    if value == 'gym':
+        return dcc.Graph(
+            id='blah',
+            figure={
+                'data': [{
+                    'x': repo_names, 
+                    'y': commits, 
+                    'type': 'bar', 
+                }]
+            }
+        )
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

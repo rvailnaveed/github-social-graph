@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 from requests.auth import HTTPBasicAuth
 
-def data_to_csv():
+def top_level_info():
     credentials = json.loads(open('credentials.json').read())
     authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
 
@@ -100,5 +100,14 @@ def data_to_csv():
     print("Saved commits information to commits_info.csv")
 
 
+def get_contributor_info(repo):
+    url = 'https://api.github.com/repos/openai/"{}"/stats/contributors'.format(repo)
+    data = requests.get(url)
+    data = data.json()
+
+    print("Collecting contributor information for " + str(repo))
+
+
+
 if __name__ == "__main__":
-    data_to_csv()
+    top_level_info()
