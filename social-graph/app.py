@@ -29,7 +29,7 @@ commits = repos['Commits count'].sort_values(ascending=True)
 
 color = np.array(['rgb(255,255,255)']*commits.shape[0])
 color[commits>=1] = 'c6e48b' # pale green
-color[commits>=100] = '7bc96f' # green
+color[commits>=200] = '7bc96f' # green
 color[commits>=500] = '#239a3b' # olive green
 color[commits>=1000] = '#196127' # dark green
 
