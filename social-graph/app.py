@@ -15,6 +15,7 @@ repos = pd.read_csv('../data/repos_info.csv')
 commits = pd.read_csv('../data/commits_info.csv')
 
 
+
 commits_count = pd.DataFrame(pd.merge(repos, 
          commits, 
          left_on='Id', 
@@ -81,12 +82,6 @@ image = {
     'padding': '10px'
 }
 
-openai_image = {
-    'display': 'inline-block',
-    'width': '300px',
-    'height': '120px'
-}
-
 
 
 ###################################  Custom Styles  ################################### 
@@ -149,7 +144,6 @@ app.layout = html.Div(children=[
                         'paper_bgcolor': 'rgba(0,0,0,0)',
                         'plot_bgcolor': 'rgba(0,0,0,0)'
                     }
-
                 }
             )
         ], className="six columns")
@@ -173,9 +167,7 @@ app.layout = html.Div(children=[
     ),
 
     html.Div([
-        html.Div([
-            html.H1("")
-        ],className='six columns'),
+        html.Div(dcc.Graph(id='violin-graph'), className='six columns'),
         html.Div(id='output-container', className='six columns')
     ], className = 'row')
 ])
@@ -206,6 +198,25 @@ def update_contribs_graph(value):
 
         return dcc.Graph(figure=fig)
 
+@app.callback(
+    Output('violin-graph', 'figure'),
+    [Input('repo-select', 'value')]
+)
+def update_active_hours(value):
+    if value != None:
+        info = git_get.contributor_punchcard(value)
+        return {
+            'data': [
+                {
+                    'type': 'violin',
+                    'x': info['Day'],
+                    'y': info['Commits']
+                }
+            ],
+            'layout': {
+                'margin': {'l': 30, 'r': 10, 'b': 30, 't': 0}
+            }
+        }
 
 if __name__ == '__main__':
     app.run_server(debug=True)

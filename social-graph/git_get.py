@@ -133,6 +133,36 @@ def get_contributors_info(repo):
     contribs_df = pd.DataFrame(contribs_info, columns= ['User', 'Additions', 'Deletions', 'Total_Commits'])
     return contribs_df
 
+def contributor_punchcard(repo):
+    url = 'https://api.github.com/repos/openai/{}/stats/punch_card'.format(repo)
+    data = requests.get(url)
+    data = data.json()
+
+    # days = list('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(","))
+    # hours = list(range(0, 25))
+    # commits_per_day = [0] * 7
+    # commits_per_hour = [0] * 24
+
+    day_info=[]
+    for day in data:
+        day_data = []
+        name = day[0]
+        hour = day[1]
+        count = day[2]
+        day_data.append(name)
+        day_data.append(hour)
+        day_data.append(count)
+
+        day_info.append(day_data)
+        
+    punchcard_df = pd.DataFrame(day_info, columns= ['Day', 'Hour', 'Commits'])
+    return punchcard_df
+        
+
+        
+
+
+
 
 if __name__ == "__main__":
-    get_contributors_info("gym")
+    contributor_punchcard("gym")
