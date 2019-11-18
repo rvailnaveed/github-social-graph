@@ -3,6 +3,7 @@ import requests
 import numpy as np
 import pandas as pd
 from pprint import pprint
+from github import Github
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -138,10 +139,10 @@ def contributor_punchcard(repo):
     data = requests.get(url)
     data = data.json()
 
-    # days = list('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(","))
-    # hours = list(range(0, 25))
-    # commits_per_day = [0] * 7
-    # commits_per_hour = [0] * 24
+    days = list('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(","))
+    hours = list(range(0, 25))
+    commits_per_day = [0] * 7
+    commits_per_hour = [0] * 24
 
     day_info=[]
     for day in data:
@@ -157,6 +158,12 @@ def contributor_punchcard(repo):
         
     punchcard_df = pd.DataFrame(day_info, columns= ['Day', 'Hour', 'Commits'])
     return punchcard_df
+    # print(punchcard_df)
+    # g = Github()
+    # repo = g.get_repo("openai/{}".format(repo))
+    # punch_card_stats = repo.get_stats_punch_card()
+    # print(punch_card_stats.get(5, 15))
+
         
 
         

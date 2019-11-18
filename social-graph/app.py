@@ -167,7 +167,7 @@ app.layout = html.Div(children=[
     ),
 
     html.Div([
-        html.Div(dcc.Graph(id='violin-graph'), className='six columns'),
+        html.Div(id='violin-graph', className='six columns'),
         html.Div(id='output-container', className='six columns')
     ], className = 'row')
 ])
@@ -199,24 +199,34 @@ def update_contribs_graph(value):
         return dcc.Graph(figure=fig)
 
 @app.callback(
-    Output('violin-graph', 'figure'),
+    Output('violin-graph', 'children'),
     [Input('repo-select', 'value')]
 )
 def update_active_hours(value):
     if value != None:
-        info = git_get.contributor_punchcard(value)
-        return {
-            'data': [
-                {
-                    'type': 'violin',
-                    'x': info['Day'],
-                    'y': info['Commits']
-                }
-            ],
-            'layout': {
-                'margin': {'l': 30, 'r': 10, 'b': 30, 't': 0}
-            }
-        }
+        #info = git_get.contributor_punchcard(value)
+        trace1 = go.Scatter(
+            x=['Sunday'] * 7, y=list(range(0, 7))
+        )
+
+        trace2 = go.Scatter( x=[1] * 7, y=list(range(0, 7)))
+        data = [trace1, trace2]
+        fig = go.Figure(data=data)
+
+        return dcc.Graph(figure=fig)
+
+        # return {
+        #     'data': [
+        #         {
+        #             'type': 'violin',
+        #             'x': info['Day'],
+        #             'y': info['Commits']
+        #         }
+        #     ],
+        #     'layout': {
+        #         'margin': {'l': 30, 'r': 10, 'b': 30, 't': 0}
+        #     }
+        # }
 
 if __name__ == '__main__':
     app.run_server(debug=True)
