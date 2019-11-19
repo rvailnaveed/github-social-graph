@@ -15,14 +15,6 @@ def top_level_info():
     data = requests.get('https://api.github.com/users/' + 'openai', auth=authentication)
     data = data.json()
 
-    # print("Information about user {}:\n".format(credentials['username']))
-    # print("Name: {}".format(data['name']))
-    # print("Email: {}".format(data['email']))
-    # print("Location: {}".format(data['location']))
-    # print("Public repos: {}".format(data['public_repos']))
-    # print("Public gists: {}".format(data['public_gists']))
-    # print("About: {}\n".format(data['bio']))
-
     print("Collecting repositories information")
     url = data['repos_url']
     page_no = 1
@@ -139,11 +131,6 @@ def contributor_punchcard(repo):
     data = requests.get(url, auth=authentication)
     data = data.json()
 
-    days = list('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(","))
-    hours = list(range(0, 25))
-    commits_per_day = [0] * 7
-    commits_per_hour = [0] * 24
-
     day_info=[]
     for day in data:
         day_data = []
@@ -157,14 +144,14 @@ def contributor_punchcard(repo):
         day_info.append(day_data)
         
     punchcard_df = pd.DataFrame(day_info, columns= ['Day', 'Hour', 'Commits'])
-    sunday = punchcard_df['Day'] == 0
-    sunday = punchcard_df[sunday]
+    sun = punchcard_df['Day'] == 0
+    sun = punchcard_df[sun]
 
-    monday = punchcard_df['Day'] == 1
-    monday = punchcard_df[monday]
+    mon = punchcard_df['Day'] == 1
+    mon = punchcard_df[mon]
 
-    tuesday = punchcard_df['Day'] == 2
-    tuesday = punchcard_df[tuesday]
+    tues = punchcard_df['Day'] == 2
+    tues = punchcard_df[tues]
 
     wed = punchcard_df['Day'] == 3
     wed = punchcard_df[wed]
@@ -178,8 +165,4 @@ def contributor_punchcard(repo):
     sat = punchcard_df['Day'] == 6
     sat = punchcard_df[sat]
     
-    return [monday, tuesday, wed, thur, fri, sat, sunday]
-
-       
-if __name__ == "__main__":
-    contributor_punchcard("gym")
+    return [mon, tues, wed, thur, fri, sat, sun]

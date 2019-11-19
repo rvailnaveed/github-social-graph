@@ -26,7 +26,7 @@ commits_count.columns = ['Id', 'Commits count']
 repos = pd.merge(repos, commits_count, on = 'Id')
 
 repo_names = repos['Name']
-commits = repos['Commits count'].sort_values(ascending=True)
+commits = repos['Commits count']
 
 color = np.array(['rgb(255,255,255)']*commits.shape[0])
 color[commits>=1] = 'c6e48b' # pale green
@@ -45,13 +45,11 @@ languages_count = pd.Series(list_of_languages).value_counts()
 
 
 
-github = 'github_blue.png'
-openai = 'openai.png'
-chain = 'chain.png'
+github = 'assets/github_blue.png'
+openai = 'assets/openai.png'
 
 encoded_github = base64.b64encode(open(github, 'rb').read()).decode('ascii')
 encoded_openai = base64.b64encode(open(openai, 'rb').read()).decode('ascii')
-encoded_chain = base64.b64encode(open(chain, 'rb').read()).decode('ascii')
 
 ###################################  Logic Goes Here  ################################### 
 
@@ -249,20 +247,9 @@ def update_active_hours(value):
 
         return dcc.Graph(figure=fig)
 
-        # return {
-        #     'data': [
-        #         {
-        #             'type': 'violin',
-        #             'x': info['Day'],
-        #             'y': info['Commits']
-        #         }
-        #     ],
-        #     'layout': {
-        #         'margin': {'l': 30, 'r': 10, 'b': 30, 't': 0}
-        #     }
-        # }
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
 
