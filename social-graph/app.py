@@ -213,7 +213,7 @@ def update_active_hours(value):
         info = git_get.contributor_punchcard(value)
         days = list('Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday'.split(","))
         data = []
-        
+
         i = 0
         for day in info:
             trace = go.Scatter(
@@ -224,7 +224,7 @@ def update_active_hours(value):
                     size=day['Commits'],
                     sizemode='area',
                     sizeref=2.*max(day['Commits'])/(25.**2),
-                    sizemin=1
+                    sizemin=4
                 ),
                 hovertext=day['Commits'],
                 name=days[i]
