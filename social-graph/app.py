@@ -191,7 +191,13 @@ def update_contribs_graph(value):
         data = [trace2, trace1]
         layout = go.Layout(
             barmode= 'stack',
-            title='Additions vs Deletions For Top 10 Contributors'
+            title={
+                'text': 'Additions vs. Deletions For Top 10 Contributors',
+                'xanchor': 'center',
+                'yanchor': 'top',
+                'x': 0.5,
+                'y': 0.9
+            }
         )
 
         fig = go.Figure(data=data, layout=layout)
@@ -204,14 +210,42 @@ def update_contribs_graph(value):
 )
 def update_active_hours(value):
     if value != None:
-        #info = git_get.contributor_punchcard(value)
-        trace1 = go.Scatter(
-            x=['Sunday'] * 7, y=list(range(0, 7))
-        )
+        info = git_get.contributor_punchcard(value)
+        days = list('Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday'.split(","))
+        data = []
+        
+        i = 0
+        for day in info:
+            trace = go.Scatter(
+                x=[days[i]] * 22,
+                y=day['Hour'],
+                mode='markers',
+                marker=dict(
+                    size=day['Commits'],
+                    sizemode='area',
+                    sizeref=2.*max(day['Commits'])/(25.**2),
+                    sizemin=1
+                ),
+                hovertext=day['Commits'],
+                name=days[i]
+            )
+            data.append(trace)
+            i += 1
 
-        trace2 = go.Scatter( x=[1] * 7, y=list(range(0, 7)))
-        data = [trace1, trace2]
-        fig = go.Figure(data=data)
+        layout = go.Layout(
+            title={
+                'text': 'Active Hours',
+                'xanchor': 'center',
+                'yanchor': 'top',
+                'x': 0.5,
+                'y': 0.9
+            },
+            yaxis={
+                'rangemode':'tozero'
+            }
+        )
+        fig = go.Figure(data=data, layout=layout)
+        fig.update_yaxes(tick0=0, dtick=1)
 
         return dcc.Graph(figure=fig)
 

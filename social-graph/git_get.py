@@ -3,14 +3,14 @@ import requests
 import numpy as np
 import pandas as pd
 from pprint import pprint
-from github import Github
 
 import requests
 from requests.auth import HTTPBasicAuth
 
+credentials = json.loads(open('credentials.json').read())
+authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
+
 def top_level_info():
-    credentials = json.loads(open('credentials.json').read())
-    authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
 
     data = requests.get('https://api.github.com/users/' + 'openai', auth=authentication)
     data = data.json()
@@ -104,7 +104,7 @@ def top_level_info():
 # Take advantage of the fact that contributors returned by ascending commits
 def get_contributors_info(repo):
     url = 'https://api.github.com/repos/openai/{}/stats/contributors'.format(repo)
-    data = requests.get(url)
+    data = requests.get(url, auth=authentication)
     data = data.json()
 
     contribs = []
@@ -136,7 +136,7 @@ def get_contributors_info(repo):
 
 def contributor_punchcard(repo):
     url = 'https://api.github.com/repos/openai/{}/stats/punch_card'.format(repo)
-    data = requests.get(url)
+    data = requests.get(url, auth=authentication)
     data = data.json()
 
     days = list('Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday'.split(","))
@@ -157,19 +157,29 @@ def contributor_punchcard(repo):
         day_info.append(day_data)
         
     punchcard_df = pd.DataFrame(day_info, columns= ['Day', 'Hour', 'Commits'])
-    return punchcard_df
-    # print(punchcard_df)
-    # g = Github()
-    # repo = g.get_repo("openai/{}".format(repo))
-    # punch_card_stats = repo.get_stats_punch_card()
-    # print(punch_card_stats.get(5, 15))
+    sunday = punchcard_df['Day'] == 0
+    sunday = punchcard_df[sunday]
 
-        
+    monday = punchcard_df['Day'] == 1
+    monday = punchcard_df[monday]
 
-        
+    tuesday = punchcard_df['Day'] == 2
+    tuesday = punchcard_df[tuesday]
 
+    wed = punchcard_df['Day'] == 3
+    wed = punchcard_df[wed]
 
+    thur = punchcard_df['Day'] == 4
+    thur = punchcard_df[thur]
 
+    fri = punchcard_df['Day'] == 5
+    fri = punchcard_df[fri]
 
+    sat = punchcard_df['Day'] == 6
+    sat = punchcard_df[sat]
+    
+    return [monday, tuesday, wed, thur, fri, sat, sunday]
+
+       
 if __name__ == "__main__":
     contributor_punchcard("gym")
