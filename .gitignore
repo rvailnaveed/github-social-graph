@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Credentials
-credentials.json
+# credentials.json
 
 # C extensions
 *.so

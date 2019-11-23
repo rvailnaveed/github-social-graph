@@ -4,7 +4,8 @@ Project for CSU3012 - Software Engineering
 Coninuation of [Github Access](https://github.com/rvailnaveed/github-access)
 
 ## Live Version
-+   Coming Soon...
++   https://openai-gitvis.herokuapp.com/
++   May take a few seconds to load as heroku puts the app to "sleep" during periods of inactivity (i.e until it is visited by someone) to ease load on their servers.
 
 ## Instructions to Build and Run Locally
 +   **Make sure you have** [Python 3.7+](https://www.python.org/downloads/)

@@ -7,12 +7,12 @@ from pprint import pprint
 import requests
 from requests.auth import HTTPBasicAuth
 
-credentials = json.loads(open('credentials.json').read())
-authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
+# credentials = json.loads(open('credentials.json').read())
+# authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
     
 def top_level_info():
 
-    data = requests.get('https://api.github.com/users/' + 'openai', auth=authentication)
+    data = requests.get('https://api.github.com/users/' + 'openai')#, auth=authentication)
     data = data.json()
 
     print("Collecting repositories information")
@@ -20,7 +20,7 @@ def top_level_info():
     page_no = 1
     repos_data = []
     while (True):
-        response = requests.get(url, auth = authentication)
+        response = requests.get(url)
         response = response.json()
         repos_data = repos_data + response
         repos_fetched = len(response)
@@ -53,7 +53,7 @@ def top_level_info():
 
     print("Collecting language data")
     for i in range(repos_df.shape[0]):
-        response = requests.get(repos_df.loc[i, 'Languages URL'], auth=authentication)
+        response = requests.get(repos_df.loc[i, 'Languages URL'])#, auth=authentication)
         response = response.json()
         if response != {}:
             languages = []
@@ -73,7 +73,7 @@ def top_level_info():
         url = repos_df.loc[i, 'Commits URL']
         page_no = 1
         while (True):
-            response = requests.get(url, auth=authentication)
+            response = requests.get(url)#, auth=authentication)
             response = response.json()
             print("URL: {}, commits: {}".format(url, len(response)))
             for commit in response:
@@ -96,7 +96,7 @@ def top_level_info():
 # Take advantage of the fact that contributors returned by ascending commits
 def get_contributors_info(repo):
     url = 'https://api.github.com/repos/openai/{}/stats/contributors'.format(repo)
-    data = requests.get(url, auth=authentication)
+    data = requests.get(url)#, auth=authentication)
     data = data.json()
 
     contribs = []
@@ -128,7 +128,7 @@ def get_contributors_info(repo):
 
 def contributor_punchcard(repo):
     url = 'https://api.github.com/repos/openai/{}/stats/punch_card'.format(repo)
-    data = requests.get(url, auth=authentication)
+    data = requests.get(url)#, auth=authentication)
     data = data.json()
 
     day_info=[]
