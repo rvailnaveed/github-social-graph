@@ -54,6 +54,9 @@ Coninuation of [Github Access](https://github.com/rvailnaveed/github-access)
 +   Zoom and save as PNG.
 
 ![](md/dynamic.gif)
+![](md/dynamic2.gif)
+![](md/dynamic3.gif)
+
 
 
 
