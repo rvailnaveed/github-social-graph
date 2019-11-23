@@ -160,7 +160,9 @@ app.layout = html.Div(children=[
         value= 'gym',
         style= {
             'width': '130px',
-            'margin-top': '3em'
+            'margin-left': 'auto',
+            'margin-right': 'auto',
+            'margin-top': '5em'
         }
     ),
 
@@ -250,6 +252,6 @@ def update_active_hours(value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
 
 

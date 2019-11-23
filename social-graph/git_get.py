@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 credentials = json.loads(open('credentials.json').read())
 authentication = HTTPBasicAuth(credentials['username'], credentials['password'])
-
+    
 def top_level_info():
 
     data = requests.get('https://api.github.com/users/' + 'openai', auth=authentication)

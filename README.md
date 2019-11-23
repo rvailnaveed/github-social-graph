@@ -1,6 +1,5 @@
 # Github Social Graph
 Project for CSU3012 - Software Engineering
----
 
 Coninuation of [Github Access](https://github.com/rvailnaveed/github-access)
 
@@ -8,6 +7,7 @@ Coninuation of [Github Access](https://github.com/rvailnaveed/github-access)
 +   Coming Soon...
 
 ## Instructions to Build and Run Locally
++   **Make sure you have** [Python 3.7+](https://www.python.org/downloads/)
 +   Clone or download the repo: `git clone https://github.com/rvailnaveed/github-social-graph.git`
 +   Navigate to the repo: `cd path/to/the/repo/github-social-graph`
 +   Install Dependancies: `pip install -r requirements.txt`
@@ -36,7 +36,7 @@ Coninuation of [Github Access](https://github.com/rvailnaveed/github-access)
 
 ![](md/languages.gif)
 
-
+**Note**. **Following graphs may take a few seconds to load depending on Internet Speed**
 ### Active Hours
 +   Dynamic graph.
 +   Changes based on repository selected from dropdown menu.
